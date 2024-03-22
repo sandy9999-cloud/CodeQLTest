@@ -31,5 +31,15 @@ namespace CodeQlTest.Controllers
             .ToArray();
         }
 
+        [ApiController]
+        [Route("api/[controller]")]
+        public class ValuesController : ControllerBase
+        {
+            [HttpPost]
+            public IActionResult Post([FromBody] string userInput)
+            {
+                return Ok(new { UserInput = userInput }); // Intentionally returning user input without proper validation
+            }
+        }
     }
 }
