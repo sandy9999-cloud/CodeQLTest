@@ -31,19 +31,5 @@ namespace CodeQlTest.Controllers
             .ToArray();
         }
 
-        public void ExecuteQuery(string userInput)
-        {
-            // WARNING: This code is vulnerable to SQL Injection
-            string connectionString = "Server=myServerAddress;Database=myDatabase;User Id=myUsername;Password=myPassword;";
-            string query = "SELECT * FROM Users WHERE Username = '" + userInput + "'";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                // Process query results...
-            }
-        }
     }
 }
