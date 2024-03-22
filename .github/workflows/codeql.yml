@@ -5,7 +5,6 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
- 
 
 jobs:
   analyze:
@@ -30,7 +29,8 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        queries: security-and-quality
+        # Include additional queries for SQL injection
+        queries: security-and-quality, csharp/suspicious-code/possible-sql-injection
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
