@@ -29,8 +29,23 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        # Include additional queries for SQL injection
-        queries: security-and-quality, csharp/suspicious-code/possible-sql-injection
+        # Include additional custom query for SQL injection
+        queries: |
+          security-and-quality
+          import csharp
+
+          from MethodCall m, MethodAccess t
+          where
+            t.getTarget().getName() = "ExecuteQuery" and
+            m = t.getTarget() and
+            m.getDeclaringType().getQualifiedName().matches("VulnerableClass") and
+            m.getParameter(0).getType().getName() = "String" and
+            exists(SqlStringExpr exp |
+              exp = m.getArgument(0) and
+              exp.getAnAccess().getTarget().hasQualifiedName("System.Data.SqlClient", "SqlCommand") and
+              exp.getArgument(0).hasTag(ExpressionTag.STRING_CONCATENATION)
+            )
+          select m, "Potential SQL Injection detected"
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
