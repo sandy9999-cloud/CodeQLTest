@@ -64,7 +64,7 @@ namespace CodeQlTest.Controllers
             if (string.IsNullOrEmpty(encryptedText))
                 return BadRequest("Encrypted text cannot be empty.");
 
-            try
+          try
             {
                 byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
                 string decryptedText = DecryptString(encryptedBytes, WeakKey);
