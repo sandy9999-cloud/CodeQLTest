@@ -9,6 +9,7 @@ namespace CodeQlTest.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly string _connectionString;
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -19,7 +20,29 @@ namespace CodeQlTest.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
+            _connectionString = "dklshdsfdsf)sdkbsfd";
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUser(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand($"SELECT * FROM Users WHERE Id = {id}", connection);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    string username = reader["Username"].ToString();
+                    return Ok(new { Id = id, Username = username });
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+        }
+
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
@@ -128,19 +151,7 @@ namespace CodeQlTest.Controllers
             }
         }
 
-        public string HashPassword(string password)
-        {
-            // Using MD5 for hashing password (insecure)
-            MD5 md5 = MD5.Create();
-            byte[] inputBytes = Encoding.UTF8.GetBytes(password);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hashBytes.Length; i++)
-            {
-                sb.Append(hashBytes[i].ToString("x2"));
-            }
-            return sb.ToString();
-        }
+      
 
     }
 }
