@@ -41,5 +41,10 @@ namespace CodeQlTest.Controllers
                 return Ok(new { UserInput = userInput }); // Intentionally returning user input without proper validation
             }
         }
+
+        public double Divide(double numerator, double denominator)
+        {
+            return numerator / denominator;
+        }
     }
 }
