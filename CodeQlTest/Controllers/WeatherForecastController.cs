@@ -49,6 +49,9 @@ namespace CodeQlTest.Controllers
         [HttpPost("encrypt")]
         public IActionResult Encrypt([FromBody] string plaintext)
         {
+            string str = null;
+            int length = str.Length; // This will cause a NullReferenceException
+
             if (string.IsNullOrEmpty(plaintext))
                 return BadRequest("Plaintext cannot be empty.");
 
