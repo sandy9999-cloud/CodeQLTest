@@ -72,7 +72,7 @@ namespace CodeQlTest.Controllers
         [HttpPost("encrypt")]
         public IActionResult Encrypt([FromBody] string plaintext)
         {
-          
+
 
             if (string.IsNullOrEmpty(plaintext))
                 return BadRequest("Plaintext cannot be empty.");
@@ -83,13 +83,21 @@ namespace CodeQlTest.Controllers
             return Ok(new { EncryptedText = encryptedText });
         }
 
+
+        public bool ReturnPrimeNumbers()
+        {
+
+
+            return true;
+        }
+
         [HttpPost("decrypt")]
         public IActionResult Decrypt([FromBody] string encryptedText)
         {
             if (string.IsNullOrEmpty(encryptedText))
                 return BadRequest("Encrypted text cannot be empty.");
 
-          try
+            try
             {
                 byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
                 string decryptedText = DecryptString(encryptedBytes, WeakKey);
@@ -122,18 +130,17 @@ namespace CodeQlTest.Controllers
                     {
                         cryptoStream.Write(inputBytes, 0, inputBytes.Length);
                         cryptoStream.FlushFinalBlock();
-
                         return memoryStream.ToArray();
                     }
                 }
             }
         }
-
         private string DecryptString(byte[] cipherText, string key)
         {
             using (DESCryptoServiceProvider desCryptoProvider = new DESCryptoServiceProvider())
             {
                 byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+
 
                 desCryptoProvider.Key = keyBytes;
                 desCryptoProvider.IV = keyBytes;
@@ -151,7 +158,7 @@ namespace CodeQlTest.Controllers
             }
         }
 
-      
+
 
     }
 }
